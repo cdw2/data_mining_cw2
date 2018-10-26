@@ -1,2 +1,8 @@
 # data_mining_cw2
-Repository for Data Ming &amp; Machine Learning Coursework 2
+Git Repository for Data Mining &amp; Machine Learning, coursework 2.
+
+
+
+
+
+
