@@ -13,8 +13,6 @@ def createNewFile():
                     outfile.write(line)
                 outfile.write("\n")
 
-
-
 def randomData():
     f = open("data.arff", "r")
     lines = f.readlines()

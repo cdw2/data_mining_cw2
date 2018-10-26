@@ -5,6 +5,7 @@ import os
 import csv
 
 CMD_1 = "--skip"
+output_folder="fer2018/arffs"
 
 if len(sys.argv) >= 3:
     command = sys.argv[1]
@@ -40,8 +41,8 @@ def output_header(output_file):
     output_file.write("@DATA\n")
 
 def open_files(filename):
-    input_file = open(filename,"r") 
-    output_file = filename[:-4]+".arff"
+    input_file = open(filename,"r")
+    output_file = os.path.join(output_folder,os.path.basename(filename[:-4]+".arff"))
     try:
         output_file = open(output_file,"x")
     except:
@@ -77,7 +78,7 @@ def get_convert_data(input_file):
         pixel_array = row[1].split(" ")
 
         for pixel in pixel_array:
-            return_row += ","+pixel
+            return_row += ","+str(int(pixel)/255)
         
         return_row+="\n"
         data.append(return_row)
