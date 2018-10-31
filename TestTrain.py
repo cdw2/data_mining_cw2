@@ -41,8 +41,8 @@ def createTrainingFile(training):
     outputFile = open("NTrainingshuffled.arff", 'w')
     
     i = 0
-    # seenList = []
-    # num_lines = sum(1 for line in open("TrainingShuffled.arff",'r'))
+    seenList = []
+    num_lines = sum(1 for line in open("TrainingShuffled.arff",'r'))
 
     while(i <= training):
         outputFile.write(lines[i])
@@ -147,9 +147,9 @@ def main():
 
 
     num_lines = sum(1 for line in open("Testshuffled.arff",'r'))
-    test = math.floor((num_lines / 100) * 80)
+    test = math.floor((num_lines / 100) * 20)
     num_lines2 = sum(1 for line in open("Trainingshuffled.arff",'r'))
-    training = math.floor((num_lines / 100) * 20)
+    training = math.floor((num_lines / 100) * 80)
     createTestFile(test)
     print("*** NEW TEST CREATED ***")
     createTrainingFile(training)
