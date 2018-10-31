@@ -6,7 +6,7 @@ from weka.core.classes import Random
 from weka.core.converters import Loader
 from weka.classifiers import Classifier, Evaluation
 
-class classify():
+class classifier():
     def __init__(self, filename, validation_split):
         jvm.start()
         self.filename = filename
@@ -23,22 +23,24 @@ class classify():
         self.testing_data = test
 
     def run_naive_bayes(self, output_directory):
-        print("\nBuilding Classifier on training data.")
+        
         # build classifier
+        print("\nBuilding Classifier on training data.")
         cls = Classifier(classname="weka.classifiers.bayes.NaiveBayes")
         cls.build_classifier(self.training_data)
-        
-        resultsString = ""
         print(cls)
-        resultsString += str(cls)
 
+        resultsString = str(cls)
+
+        #Evaluate Classifier
         print("\nEvaluating on test data.")
         resultsString+="\nEvaluating on test Data:\n"
-        # evaluate
-        evl = Evaluation(self.training_data)
+        evl=Evaluation(self.training_data)
         evl.test_model(cls, self.testing_data)
         print(evl.summary())
         resultsString+=str(evl.summary())
+
+        #Save Results and Cleanup
         self.save_results("Naive_Bayes",resultsString,output_directory)
         self.cleanup()
 

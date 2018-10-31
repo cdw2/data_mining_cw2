@@ -1,5 +1,6 @@
 #!./weka_env/bin/python3
 import os
+import sys
 import csv_arff
 import part3_attributeReduction
 import extract_pixels
@@ -11,6 +12,10 @@ reduction_folder="fer2018/reduced_arffs"
 transformed_arffs="fer018/transformed_arffs"
 pixel_values="pixel_values"
 
+preprocess = False
+if(len(sys.argv)==2):
+    if sys.argv[1]=="--preprocess":
+        preprocess=True
 
 def convert_to_arff():
 
@@ -50,14 +55,17 @@ def extract():
 
 def run_classifiers():
     filename="fer2018/arffs/fer2018.arff"
-    naiveBayes = classify.classify(filename,80)
+    naiveBayes = classify.classifier(filename,80)
     naiveBayes.run_naive_bayes("results/test1")
     naiveBayes.cleanup()
 
 try:
-    # convert_to_arff()
-    # reduce_attr()
-    # extract()
+    if(preprocess):
+        print("***** Preprocessing Data ******")
+        convert_to_arff()
+        reduce_attr()
+        extract()
+        
     run_classifiers()
 except Exception as e:
     print(e)

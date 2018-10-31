@@ -13829,6 +13829,8 @@ pixel2303
   precision      0.0039  0.0039  0.0039  0.0039  0.0039  0.0039  0.0039
 
 
+Evaluating on test Data:
+
 Correctly Classified Instances        1548               21.5689 %
 Incorrectly Classified Instances      5629               78.4311 %
 Kappa statistic                          0.0906
