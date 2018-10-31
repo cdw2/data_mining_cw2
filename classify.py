@@ -22,18 +22,44 @@ class classify():
         self.training_data = train
         self.testing_data = test
 
-    def run_naive_bayes(self):
+    def run_naive_bayes(self, output_directory):
         print("\nBuilding Classifier on training data.")
         # build classifier
         cls = Classifier(classname="weka.classifiers.bayes.NaiveBayes")
         cls.build_classifier(self.training_data)
+        
+        resultsString = ""
         print(cls)
+        resultsString += str(cls)
 
         print("\nEvaluating on test data.")
+        resultsString+="\nEvaluating on test Data:\n"
         # evaluate
         evl = Evaluation(self.training_data)
         evl.test_model(cls, self.testing_data)
         print(evl.summary())
+        resultsString+=str(evl.summary())
+        self.save_results("Naive_Bayes",resultsString,output_directory)
+        self.cleanup()
+
+    def save_results(self, classifier, string, output_directory):
+        try:
+            os.mkdir(output_directory)
+        except:
+            print("Directory Exists, Continuting.\n")
+        
+        output_file = os.path.join(output_directory,classifier+"results.txt")
+
+        try:
+            output_file = open(output_file,"x")
+        except:
+            os.remove(output_file)
+            print("Removed exisiting file\n")
+            output_file = open(output_file,"a")
+
+        output_file.write(string) 
+        output_file.close() 
+
 
     def cleanup(self):
         jvm.stop()

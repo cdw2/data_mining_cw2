@@ -51,7 +51,7 @@ def extract():
 def run_classifiers():
     filename="fer2018/arffs/fer2018.arff"
     naiveBayes = classify.classify(filename,80)
-    naiveBayes.run_naive_bayes()
+    naiveBayes.run_naive_bayes("results/test1")
     naiveBayes.cleanup()
 
 try:
