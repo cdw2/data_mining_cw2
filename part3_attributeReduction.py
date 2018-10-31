@@ -7,13 +7,19 @@ Group: 9
 '''
 
 import sys
+import os
 
 if (len(sys.argv) != 2): # check correct number of args given
 	print("Provide one input .arff file as a command-line argument")
 	sys.exit()
 
 def newFile(oldName): # returns new filename for reduced attributes
+	inner_directory = os.path.dirname(oldName)
+	outer_directory = os.path.dirname(inner_directory)
+	oldName = os.path.basename(oldName)
 	newName = oldName[0:(len(oldName)-5)]+".reduced.arff" # new file name
+	newName = os.path.join(os.path.join(outer_directory,"reduced_arffs"),newName)
+	# print("File output to: "+newName)
 	return newName
 
 def calculate(pixelList): # Returns average value of a list of pixels
@@ -22,7 +28,7 @@ def calculate(pixelList): # Returns average value of a list of pixels
 		total += i # add all pixel values together
 	
 	total = total/len(pixelList)
-	return str(int(total)) # divide by number of pixels for average
+	return str(total) # divide by number of pixels for average
 
 
 def iterate(filenameIn, filenameOut): # iterate through pixels of input file
@@ -59,7 +65,7 @@ def iterate(filenameIn, filenameOut): # iterate through pixels of input file
 
 		for i in range(24):
 			for j in range(24):
-				pixelList = [int(datum[a]), int(datum[b]), int(datum[c]), int(datum[d])]
+				pixelList = [float(datum[a]), float(datum[b]), float(datum[c]), float(datum[d])]
 				squareValue = calculate(pixelList)
 				# TODO write squareValue to output file followed by comma unless end of line
 				output.write(squareValue)

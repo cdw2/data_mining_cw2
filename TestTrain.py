@@ -43,8 +43,8 @@ def createTrainingFile():
     outputFile = open("NTrainingshuffled.arff", 'w')
     
     i = 0
-    seenList = []
-    num_lines = sum(1 for line in open("TrainingShuffled.arff",'r'))
+    # seenList = []
+    # num_lines = sum(1 for line in open("TrainingShuffled.arff",'r'))
 
     while(i <= 7177):
         outputFile.write(lines[i])
