@@ -1,37 +1,43 @@
+import os
+import sys
+import traceback
 import weka.core.jvm as jvm
-from weka.core.converters import Loader
-from weka.classifiers import Classifier
-from weka.classifiers import Evaluation
 from weka.core.classes import Random
-import weka.plot.classifiers as plcls  # NB: matplotlib is required
+from weka.core.converters import Loader
+from weka.classifiers import Classifier, Evaluation
 
-data_dir = "fer2018/"
+data_dir = "fer2018/arffs/"
+tt_file = "fer2018.arff"
 
-try:
-    jvm.start()
-    
+def main(args):
+    data_file = data_dir + tt_file
+
+    print("\nLoading dataset: " + data_file)
     loader = Loader(classname="weka.core.converters.ArffLoader")
-    data = loader.load_file(data_dir + "fer2018.arff")
+    data = loader.load_file(data_file)
     data.class_is_first()
 
-    # print(data)
+    # generate train/test split of randomized data
+    train, test = data.train_test_split(80.0, Random(1))
 
-    cls = Classifier(classname="weka.classifiers.lazy.IBk", options=["-K", "3"])
-    cls.build_classifier(data)
+    print("\nBuilding Classifier on training data.")
+    # build classifier
+    cls = Classifier(classname="weka.classifiers.bayes.NaiveBayes")
+    cls.build_classifier(train)
+    print(cls)
 
-    for index, inst in enumerate(data):
-        pred = cls.classify_instance(inst)
-        dist = cls.distribution_for_instance(inst)
-        print(str(index+1) + ": label index=" + str(pred) + ", class distribution=" + str(dist))
-
-    evl = Evaluation(data)
-    evl.crossvalidate_model(cls, data, 10, Random(1))
-
-    print(evl.percent_correct)
+    print("\nEvaluating on test data.")
+    # evaluate
+    evl = Evaluation(train)
+    evl.test_model(cls, test)
     print(evl.summary())
-    print(evl.class_details())
 
-    plcls.plot_roc(evl, class_index=[0, 1, 2, 3, 4, 5, 6], wait=True)
 
-finally:
-    jvm.stop()
+if __name__ == "__main__":
+    try:
+        jvm.start()
+        main(sys.argv)
+    except Exception as e:
+        print(traceback.format_exc())
+    finally:
+        jvm.stop()

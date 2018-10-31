@@ -4,3 +4,4 @@ weka_env/
 *.arff
 *.model
 trained_models/
+__pycache__
