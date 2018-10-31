@@ -3,11 +3,9 @@ import os.path
 import random
 import fileinput
 import linecache
+import math
 
-def createTestFile():
-    # 80% is 28709.600
-    
-    
+def createTestFile(test):
     
     f = open("Testshuffled.arff", "r")
     lines = f.readlines()
@@ -16,7 +14,7 @@ def createTestFile():
     i = 0
     seenList = []
 
-    while(i <= 28709):
+    while(i <= test):
         outputFile.write(lines[i])
         i +=1
     
@@ -36,8 +34,8 @@ def createTestFile():
     f.close()
 
 
-def createTrainingFile():
-    #20% is 7177.4000
+def createTrainingFile(training):
+
     f = open("Trainingshuffled.arff", "r")
     lines = f.readlines()
     outputFile = open("NTrainingshuffled.arff", 'w')
@@ -46,7 +44,7 @@ def createTrainingFile():
     # seenList = []
     # num_lines = sum(1 for line in open("TrainingShuffled.arff",'r'))
 
-    while(i <= 7177):
+    while(i <= training):
         outputFile.write(lines[i])
         i +=1
     f.close()
@@ -146,9 +144,15 @@ def main():
     print("*** DATA CREATED ***")
     randomData()
     print("*** DATA RANDOMISED ***")
-    createTestFile()
+
+
+    num_lines = sum(1 for line in open("Testshuffled.arff",'r'))
+    test = math.floor((num_lines / 100) * 80)
+    num_lines2 = sum(1 for line in open("Trainingshuffled.arff",'r'))
+    training = math.floor((num_lines / 100) * 20)
+    createTestFile(test)
     print("*** NEW TEST CREATED ***")
-    createTrainingFile()
+    createTrainingFile(training)
     print("*** NEW TRAINING CREATED ***")
 
     os.remove('data.arff')
