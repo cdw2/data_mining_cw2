@@ -1,9 +1,9 @@
 #!./weka_env/bin/python3
-
 import os
 import csv_arff
 import part3_attributeReduction
 import extract_pixels
+import classify
 
 csv_folder="fer2018/csv"
 arff_folder="fer2018/arffs"
@@ -48,11 +48,17 @@ def extract():
         extractor = extract_pixels.extract_pix(filename)
         extractor.run()
 
+def run_classifiers():
+    filename="fer2018/arffs/fer2018.arff"
+    naiveBayes = classify.classify(filename,80)
+    naiveBayes.run_naive_bayes()
+    naiveBayes.cleanup()
 
 try:
     # convert_to_arff()
     # reduce_attr()
-    extract()
+    # extract()
+    run_classifiers()
 except Exception as e:
     print(e)
 
