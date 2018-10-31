@@ -40,8 +40,10 @@ cd fer2018/transformed_arffs
 python3 TestTrain.py transformed_14.arff
 python3 TestTrain.py transformed_35.arff
 python3 TestTrain.py transformed_70.arff
+python3 TestTrain.py fer2018.arff
 mv Testtransformed* ../split/
 mv Training* ../split/
+mv Testfer* ../split/
 echo "Done"
 cd "$cwd"
 
