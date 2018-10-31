@@ -60,7 +60,8 @@ class classifier():
             output_file = open(output_file,"a")
 
         output_file.write(string) 
-        output_file.close() 
+        output_file.close()
+        print("\nResults saved to :"+output_file)
 
 
     def cleanup(self):
