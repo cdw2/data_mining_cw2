@@ -41,7 +41,7 @@ class cw2_classifier():
         resultsString = ""
         resultsString = self.print_both(str(cls),resultsString)
 
-        buildTimeString = "Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        buildTimeString = "NB Split Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Evaluate Classifier
@@ -49,11 +49,12 @@ class cw2_classifier():
 
         buildTimeStart=time.time()
         evl=Evaluation(self.training_data)
-        print("Testing...\n")
         evl.test_model(cls, self.testing_data)
 
         resultsString = self.print_both(str(evl.summary()),resultsString)
-        buildTimeString = "Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(str(evl.class_details()),resultsString)
+        resultsString = self.print_both(str(evl.confusion_matrix),resultsString)
+        buildTimeString = "\nNB Split Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Save Results and Cleanup
@@ -69,7 +70,7 @@ class cw2_classifier():
         resultsString = ""
         resultsString = self.print_both(str(cls),resultsString)
 
-        buildTimeString = "Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        buildTimeString = "NB Cross Eval Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Evaluate Classifier
@@ -78,12 +79,11 @@ class cw2_classifier():
         buildTimeStart=time.time()
         evl = Evaluation(self.training_data)
         evl.crossvalidate_model(cls, self.training_data, 10, Random(1))
-        print(evl.percent_correct)
-        print(evl.summary())
-        print(evl.class_details())
 
         resultsString = self.print_both(str(evl.summary()),resultsString)
-        buildTimeString = "Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(str(evl.class_details()),resultsString)
+        resultsString = self.print_both(str(evl.confusion_matrix),resultsString)
+        buildTimeString = "\nNB Cross Eval Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Save Results and Cleanup
@@ -99,7 +99,7 @@ class cw2_classifier():
         resultsString = ""
         resultsString = self.print_both(str(cls),resultsString)
 
-        buildTimeString = "Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        buildTimeString = "IBK Split Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Evaluate Classifier
@@ -107,12 +107,12 @@ class cw2_classifier():
 
         buildTimeStart=time.time()
         evl=Evaluation(self.training_data)
-        print("Testing...\n")
         evl.test_model(cls, self.testing_data)
 
-        resultsString = self.print_both(str(evl.summary(title=None, complexity=True)),resultsString)
+        resultsString = self.print_both(str(evl.summary()),resultsString)
+        resultsString = self.print_both(str(evl.class_details()),resultsString)
         resultsString = self.print_both(str(evl.confusion_matrix),resultsString)
-        buildTimeString = "\nClassifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
+        buildTimeString = "\nIBK Split Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Save Results and Cleanup
@@ -128,7 +128,7 @@ class cw2_classifier():
         resultsString = ""
         resultsString = self.print_both(str(cls),resultsString)
 
-        buildTimeString = "Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        buildTimeString = "IBK Cross Eval Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Evaluate Classifier
@@ -137,13 +137,11 @@ class cw2_classifier():
         buildTimeStart=time.time()
         evl = Evaluation(self.training_data)
         evl.crossvalidate_model(cls, self.training_data, 10, Random(1))
-        print(evl.percent_correct)
-        print(evl.summary())
-        print(evl.class_details())
 
-        resultsString = self.print_both(str(evl.summary(title=None, complexity=True)),resultsString)
+        resultsString = self.print_both(str(evl.summary()),resultsString)
+        resultsString = self.print_both(str(evl.class_details()),resultsString)
         resultsString = self.print_both(str(evl.confusion_matrix),resultsString)
-        buildTimeString = "\nClassifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
+        buildTimeString = "\nIBK Cross Eval Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Save Results and Cleanup

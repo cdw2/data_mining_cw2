@@ -99,6 +99,7 @@ def run_nb_crossval():
 def run_classifiers():
 
     jvm_helper = classify.cw2_helper(False)
+    jvm_helper.cleanup()
 
     threads = []
 
