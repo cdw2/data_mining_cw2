@@ -5,3 +5,4 @@ weka_env/
 *.model
 trained_models/
 __pycache__
+.vscode
