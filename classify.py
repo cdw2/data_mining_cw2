@@ -5,6 +5,7 @@ import weka.core.jvm as jvm
 from weka.core.classes import Random
 from weka.core.converters import Loader
 from weka.classifiers import Classifier, Evaluation
+from datetime import datetime
 
 class classifier():
     def __init__(self, filename, validation_split):
@@ -26,19 +27,27 @@ class classifier():
         
         # build classifier
         print("\nBuilding Classifier on training data.")
+        buildTimeStart=datetime.now()
         cls = Classifier(classname="weka.classifiers.bayes.NaiveBayes")
         cls.build_classifier(self.training_data)
-        print(cls)
 
-        resultsString = str(cls)
+        resultsString = ""
+        resultsString += self.print_both(str(cls),resultsString)
 
+        buildTimeString = "Classifier Built in "+str(datetime.now()-buildTimeStart)+" secs.\n"
+        resultsString += self.print_both(buildTimeString,resultsString)
+        
         #Evaluate Classifier
-        print("\nEvaluating on test data.")
-        resultsString+="\nEvaluating on test Data:\n"
+        resultsString += self.print_both("\nEvaluating on test data.",resultsString)
+
+        buildTimeStart=datetime.now()
         evl=Evaluation(self.training_data)
         evl.test_model(cls, self.testing_data)
-        print(evl.summary())
-        resultsString+=str(evl.summary())
+
+        resultsString += self.print_both(str(evl.summary()),resultsString)
+        buildTimeString = "Classifier Evaluated in "+str(datetime.now()-buildTimeStart)+" secs.\n"
+        resultsString += self.print_both(buildTimeString,resultsString)
+        
 
         #Save Results and Cleanup
         self.save_results("Naive_Bayes",resultsString,output_directory)
@@ -50,19 +59,24 @@ class classifier():
         except:
             print("Directory Exists, Continuting.\n")
         
-        output_file = os.path.join(output_directory,classifier+"results.txt")
+        output_file_path = os.path.join(output_directory,classifier+"results.txt")
 
         try:
-            output_file = open(output_file,"x")
+            output_file = open(output_file_path,"x")
         except:
-            os.remove(output_file)
+            os.remove(output_file_path)
             print("Removed exisiting file\n")
-            output_file = open(output_file,"a")
+            output_file = open(output_file_path,"a")
 
         output_file.write(string) 
         output_file.close()
-        print("\nResults saved to :"+output_file)
+        print("\nResults saved to :"+output_file_path)
 
 
     def cleanup(self):
         jvm.stop()
+
+    def print_both(self,print_string, resultsString):
+        print(print_string)
+        resultsString += print_string
+        return resultsString
