@@ -99,8 +99,8 @@ def run_classifiers():
     # Create new threads
     thread1 = myThread(1, "IBK-Cross-Val", run_ibk_crossval)
     thread2 = myThread(2, "IBK-Split", run_ibk_split)
-    thread3 = myThread(3, "run_nb_split", run_ibk_crossval)
-    thread4 = myThread(4, "run_nb_crossval", run_ibk_split)
+    thread3 = myThread(3, "run_nb_split", run_nb_split)
+    thread4 = myThread(4, "run_nb_crossval", run_nb_crossval)
 
     # Start new Threads
     thread1.start()

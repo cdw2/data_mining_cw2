@@ -33,49 +33,48 @@ class cw2_classifier():
     def run_naive_bayes_split(self, output_directory):
         # build classifier
         print("\nBuilding Classifier on training data.")
-        buildTimeStart=time.time()()
+        buildTimeStart=time.time()
         cls = Classifier(classname="weka.classifiers.bayes.NaiveBayes")
         cls.build_classifier(self.training_data)
 
         resultsString = ""
         resultsString = self.print_both(str(cls),resultsString)
 
-        buildTimeString = "Classifier Built in "+str(time.time()()-buildTimeStart)+" secs.\n"
+        buildTimeString = "Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Evaluate Classifier
         resultsString = self.print_both("\nEvaluating on test data.",resultsString)
 
-        buildTimeStart=time.time()()
+        buildTimeStart=time.time()
         evl=Evaluation(self.training_data)
         print("Testing...\n")
         evl.test_model(cls, self.testing_data)
 
         resultsString = self.print_both(str(evl.summary()),resultsString)
-        buildTimeString = "Classifier Evaluated in "+str(time.time()()-buildTimeStart)+" secs.\n"
+        buildTimeString = "Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Save Results and Cleanup
         self.save_results("Naive_Bayes",resultsString,output_directory)
-        self.cleanup()
     
     def run_naive_bayes_crossval(self, output_directory):
         # build classifier
         print("\nBuilding Classifier on training data.")
-        buildTimeStart=time.time()()
+        buildTimeStart=time.time()
         cls = Classifier(classname="weka.classifiers.bayes.NaiveBayes")
         cls.build_classifier(self.training_data)
 
         resultsString = ""
         resultsString = self.print_both(str(cls),resultsString)
 
-        buildTimeString = "Classifier Built in "+str(time.time()()-buildTimeStart)+" secs.\n"
+        buildTimeString = "Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Evaluate Classifier
         resultsString = self.print_both("\nCross Evaluating on test data.",resultsString)
 
-        buildTimeStart=time.time()()
+        buildTimeStart=time.time()
         evl = Evaluation(self.training_data)
         evl.crossvalidate_model(cls, self.training_data, 10, Random(1))
         print(evl.percent_correct)
@@ -83,12 +82,11 @@ class cw2_classifier():
         print(evl.class_details())
 
         resultsString = self.print_both(str(evl.summary()),resultsString)
-        buildTimeString = "Classifier Evaluated in "+str(time.time()()-buildTimeStart)+" secs.\n"
+        buildTimeString = "Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Save Results and Cleanup
         self.save_results("Naive_Bayes_Crossval",resultsString,output_directory)
-        self.cleanup()
 
     def run_ibk_split(self, output_directory):
         # build classifier
@@ -118,7 +116,6 @@ class cw2_classifier():
         
         #Save Results and Cleanup
         self.save_results("IBK",resultsString,output_directory)
-        self.cleanup()
 
     def run_ibk_crossval(self, output_directory):
         # build classifier
@@ -150,7 +147,6 @@ class cw2_classifier():
         
         #Save Results and Cleanup
         self.save_results("IBK_Crossval",resultsString,output_directory)
-        self.cleanup()
 
     def save_results(self, classifier, string, output_directory):
         try:
