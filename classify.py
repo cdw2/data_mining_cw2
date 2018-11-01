@@ -9,7 +9,8 @@ import time
 
 class cw2_classifier():
     def __init__(self):
-        jvm.start()
+        pass
+        # jvm.start()
 
     def load_data(self, filename):
         self.filename = filename
@@ -167,10 +168,15 @@ class cw2_classifier():
         output_file.close()
         print("**** Results saved to :"+output_file_path)
 
-    def cleanup(self):
-        jvm.stop()
-
     def print_both(self,print_string, resultsString):
         print(print_string)
         resultsString += print_string
         return resultsString
+
+class cw2_helper():
+    def __init__(self, start=True):
+        if(start):
+            jvm.start()
+
+    def cleanup(self):
+        jvm.stop()

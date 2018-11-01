@@ -65,35 +65,41 @@ def extract():
         extractor.run()
 
 def run_ibk_crossval():
+    jvm_helper = classify.cw2_helper()
+
     filename="fer2018/reduced_arffs/fer2018.reduced.arff"
     ibkCls_crossval = classify.cw2_classifier()
     ibkCls_crossval.load_data(filename)
     ibkCls_crossval.run_ibk_crossval("results/test1")
-    ibkCls_crossval.cleanup()
 
 def run_ibk_split():
+    jvm_helper = classify.cw2_helper()
+
     filename="fer2018/reduced_arffs/fer2018.reduced.arff"
     ibkCls = classify.cw2_classifier()
     ibkCls.load_data_split(filename,80)
     ibkCls.run_ibk_split("results/test1")
-    ibkCls.cleanup()
 
 def run_nb_split():
+    jvm_helper = classify.cw2_helper()
+
     filename="fer2018/reduced_arffs/fer2018.reduced.arff"
     naiveBayesCls = classify.cw2_classifier()
     naiveBayesCls.load_data_split(filename,80)
     naiveBayesCls.run_naive_bayes_split("results/test2")
-    naiveBayesCls.cleanup()
 
 def run_nb_crossval():
+    jvm_helper = classify.cw2_helper()
+
     filename="fer2018/reduced_arffs/fer2018.reduced.arff"
     naiveBayesCls_crossval = classify.cw2_classifier()
     naiveBayesCls_crossval.load_data_split(filename,80)
     naiveBayesCls_crossval.run_naive_bayes_crossval("results/test2")
-    naiveBayesCls_crossval.cleanup()
-
 
 def run_classifiers():
+
+    jvm_helper = classify.cw2_helper(False)
+
     threads = []
 
     # Create new threads
@@ -117,6 +123,8 @@ def run_classifiers():
     # Wait for all threads to complete
     for t in threads:
         t.join()
+    
+    jvm_helper.cleanup()
     print ("Exiting Main Thread")
 
 try:
