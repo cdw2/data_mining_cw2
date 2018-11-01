@@ -5,16 +5,23 @@ import weka.core.jvm as jvm
 from weka.core.classes import Random
 from weka.core.converters import Loader
 from weka.classifiers import Classifier, Evaluation
-from datetime import datetime
+import time
 
-class classifier():
-    def __init__(self, filename, validation_split):
+class cw2_classifier():
+    def __init__(self):
         jvm.start()
-        self.filename = filename
-        self.validation_split = validation_split
-        self.load_data(filename)       
 
     def load_data(self, filename):
+        self.filename = filename
+        print("\nLoading dataset: " + filename)
+        loader = Loader(classname="weka.core.converters.ArffLoader")
+        data = loader.load_file(filename)
+        data.class_is_first()
+        self.training_data = data
+
+    def load_data_split(self, filename, validation_split):
+        self.validation_split = validation_split    
+        self.filename = filename
         print("\nLoading dataset: " + filename)
         loader = Loader(classname="weka.core.converters.ArffLoader")
         data = loader.load_file(filename)
@@ -23,34 +30,126 @@ class classifier():
         self.training_data = train
         self.testing_data = test
 
-    def run_naive_bayes(self, output_directory):
-        
+    def run_naive_bayes_split(self, output_directory):
         # build classifier
         print("\nBuilding Classifier on training data.")
-        buildTimeStart=datetime.now()
+        buildTimeStart=time.time()()
         cls = Classifier(classname="weka.classifiers.bayes.NaiveBayes")
         cls.build_classifier(self.training_data)
 
         resultsString = ""
-        resultsString += self.print_both(str(cls),resultsString)
+        resultsString = self.print_both(str(cls),resultsString)
 
-        buildTimeString = "Classifier Built in "+str(datetime.now()-buildTimeStart)+" secs.\n"
-        resultsString += self.print_both(buildTimeString,resultsString)
+        buildTimeString = "Classifier Built in "+str(time.time()()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
         
         #Evaluate Classifier
-        resultsString += self.print_both("\nEvaluating on test data.",resultsString)
+        resultsString = self.print_both("\nEvaluating on test data.",resultsString)
 
-        buildTimeStart=datetime.now()
+        buildTimeStart=time.time()()
         evl=Evaluation(self.training_data)
+        print("Testing...\n")
         evl.test_model(cls, self.testing_data)
 
-        resultsString += self.print_both(str(evl.summary()),resultsString)
-        buildTimeString = "Classifier Evaluated in "+str(datetime.now()-buildTimeStart)+" secs.\n"
-        resultsString += self.print_both(buildTimeString,resultsString)
+        resultsString = self.print_both(str(evl.summary()),resultsString)
+        buildTimeString = "Classifier Evaluated in "+str(time.time()()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
         
-
         #Save Results and Cleanup
         self.save_results("Naive_Bayes",resultsString,output_directory)
+        self.cleanup()
+    
+    def run_naive_bayes_crossval(self, output_directory):
+        # build classifier
+        print("\nBuilding Classifier on training data.")
+        buildTimeStart=time.time()()
+        cls = Classifier(classname="weka.classifiers.bayes.NaiveBayes")
+        cls.build_classifier(self.training_data)
+
+        resultsString = ""
+        resultsString = self.print_both(str(cls),resultsString)
+
+        buildTimeString = "Classifier Built in "+str(time.time()()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Evaluate Classifier
+        resultsString = self.print_both("\nCross Evaluating on test data.",resultsString)
+
+        buildTimeStart=time.time()()
+        evl = Evaluation(self.training_data)
+        evl.crossvalidate_model(cls, self.training_data, 10, Random(1))
+        print(evl.percent_correct)
+        print(evl.summary())
+        print(evl.class_details())
+
+        resultsString = self.print_both(str(evl.summary()),resultsString)
+        buildTimeString = "Classifier Evaluated in "+str(time.time()()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Save Results and Cleanup
+        self.save_results("Naive_Bayes_Crossval",resultsString,output_directory)
+        self.cleanup()
+
+    def run_ibk_split(self, output_directory):
+        # build classifier
+        print("\nBuilding Classifier on training data.")
+        buildTimeStart=time.time()
+        cls = Classifier(classname="weka.classifiers.lazy.IBk", options=["-K", "3", "-W", "0", "-A", "weka.core.neighboursearch.LinearNNSearch -A \"weka.core.EuclideanDistance -R first-last\""])
+        cls.build_classifier(self.training_data)
+
+        resultsString = ""
+        resultsString = self.print_both(str(cls),resultsString)
+
+        buildTimeString = "Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Evaluate Classifier
+        resultsString = self.print_both("\nEvaluating on test data.",resultsString)
+
+        buildTimeStart=time.time()
+        evl=Evaluation(self.training_data)
+        print("Testing...\n")
+        evl.test_model(cls, self.testing_data)
+
+        resultsString = self.print_both(str(evl.summary(title=None, complexity=True)),resultsString)
+        resultsString = self.print_both(str(evl.confusion_matrix),resultsString)
+        buildTimeString = "\nClassifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Save Results and Cleanup
+        self.save_results("IBK",resultsString,output_directory)
+        self.cleanup()
+
+    def run_ibk_crossval(self, output_directory):
+        # build classifier
+        print("\nBuilding Classifier on training data.")
+        buildTimeStart=time.time()
+        cls = Classifier(classname="weka.classifiers.lazy.IBk", options=["-K", "3", "-W", "0", "-A", "weka.core.neighboursearch.LinearNNSearch -A \"weka.core.EuclideanDistance -R first-last\""])
+        cls.build_classifier(self.training_data)
+
+        resultsString = ""
+        resultsString = self.print_both(str(cls),resultsString)
+
+        buildTimeString = "Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Evaluate Classifier
+        resultsString = self.print_both("\nCross Evaluating on test data.",resultsString)
+
+        buildTimeStart=time.time()
+        evl = Evaluation(self.training_data)
+        evl.crossvalidate_model(cls, self.training_data, 10, Random(1))
+        print(evl.percent_correct)
+        print(evl.summary())
+        print(evl.class_details())
+
+        resultsString = self.print_both(str(evl.summary(title=None, complexity=True)),resultsString)
+        resultsString = self.print_both(str(evl.confusion_matrix),resultsString)
+        buildTimeString = "\nClassifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Save Results and Cleanup
+        self.save_results("IBK_Crossval",resultsString,output_directory)
         self.cleanup()
 
     def save_results(self, classifier, string, output_directory):
@@ -59,19 +158,18 @@ class classifier():
         except:
             print("Directory Exists, Continuting.\n")
         
-        output_file_path = os.path.join(output_directory,classifier+"results.txt")
+        output_file_path = os.path.join(output_directory,classifier+"_results.txt")
 
         try:
             output_file = open(output_file_path,"x")
         except:
             os.remove(output_file_path)
             print("Removed exisiting file\n")
-            output_file = open(output_file_path,"a")
+            output_file = open(output_file_path,"x")
 
         output_file.write(string) 
         output_file.close()
-        print("\nResults saved to :"+output_file_path)
-
+        print("**** Results saved to :"+output_file_path)
 
     def cleanup(self):
         jvm.stop()
