@@ -6,6 +6,8 @@ from weka.core.classes import Random
 from weka.core.converters import Loader
 from weka.classifiers import Classifier, Evaluation
 import time
+from weka.filters import Filter
+from weka.attribute_selection import ASSearch, ASEvaluation, AttributeSelection
 
 class cw2_classifier():
     def __init__(self):
@@ -18,6 +20,7 @@ class cw2_classifier():
         loader = Loader(classname="weka.core.converters.ArffLoader")
         data = loader.load_file(filename)
         data.class_is_first()
+        data = self.filter_data(data)
         self.training_data = data
 
     def load_data_split(self, filename, validation_split):
@@ -27,6 +30,7 @@ class cw2_classifier():
         loader = Loader(classname="weka.core.converters.ArffLoader")
         data = loader.load_file(filename)
         data.class_is_first()
+        data = self.filter_data(data)
         train, test = data.train_test_split(self.validation_split, Random(1))
         self.training_data = train
         self.testing_data = test
@@ -170,6 +174,17 @@ class cw2_classifier():
         print(print_string)
         resultsString += print_string
         return resultsString
+
+    def filter_data(self,data):
+        print("Filtering Data..\n")
+        flter = Filter(classname="weka.filters.supervised.attribute.AttributeSelection")
+        aseval = ASEvaluation(classname="weka.attributeSelection.CfsSubsetEval", options=["-P", "1", "-E", "1"])
+        assearch = ASSearch(classname="weka.attributeSelection.BestFirst", options=["-D", "1", "-N", "5"])
+        flter.set_property("evaluator", aseval.jobject)
+        flter.set_property("search", assearch.jobject)
+        flter.inputformat(data)
+        filtered = flter.filter(data)
+        return filtered
 
 class cw2_helper():
     def __init__(self, start=True):
