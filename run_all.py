@@ -133,7 +133,7 @@ try:
         print("***** Preprocessing Data ******")
         convert_to_arff()
         reduce_attr()
-        extract()
+        # extract()
         
     run_classifiers()
 except Exception as e:
