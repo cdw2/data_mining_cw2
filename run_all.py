@@ -18,8 +18,8 @@ if(len(sys.argv)==2):
     if sys.argv[1]=="--preprocess":
         preprocess=True
 
-filename="fer2018/transformed_arffs/transformed_14.arff"
-testNum = "_14_pixels"
+filename="fer2018/transformed_arffs/transformed_70.arff"
+testNum = "_70_pixels"
 
 class myThread (threading.Thread):
    def __init__(self, threadID, name, function, args=None):
@@ -107,6 +107,14 @@ def run_bayes_split(parents=1):
     naiveBayesCls_crossval = classify.cw2_classifier()
     naiveBayesCls_crossval.load_data_split(filename,80)
     naiveBayesCls_crossval.run_bayes_split("results/test"+str(testNum),parents)
+
+    naiveBayesCls_crossval = classify.cw2_classifier()
+    naiveBayesCls_crossval.load_data_split(filename,80)
+    naiveBayesCls_crossval.run_bayes_hill_split("results/test"+str(testNum),parents)
+
+    naiveBayesCls_crossval = classify.cw2_classifier()
+    naiveBayesCls_crossval.load_data_split(filename,80)
+    naiveBayesCls_crossval.run_bayes_tan_split("results/test"+str(testNum),parents)
 
 def run_classifiers():
 

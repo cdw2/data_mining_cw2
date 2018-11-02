@@ -122,8 +122,68 @@ class cw2_classifier():
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Save Results and Cleanup
-        self.save_results("Bayes_P"+str(parents)+"_",resultsString,output_directory)
-        self.save_results("Bayes_"+str(parents)+"_Graph",cls.graph,output_directory, True)
+        self.save_results("Bayes_K_P"+str(parents)+"_",resultsString,output_directory)
+        self.save_results("Bayes_K_P"+str(parents)+"_Graph",cls.graph,output_directory, True)
+
+    def run_bayes_hill_split(self, output_directory, parents=1):
+        # build classifier
+        print("\nBuilding Bayes Classifier on training data. Parents = "+str(parents)+"\n")
+        buildTimeStart=time.time()
+        cls = Classifier(classname="weka.classifiers.bayes.BayesNet", options=["-D","-Q", "weka.classifiers.bayes.net.search.local.HillClimber", "--", "-P", ""+str(parents),"-S", "BAYES", "-E", "weka.classifiers.bayes.net.estimate.SimpleEstimator", "--", "-A", "0.5"])
+        cls.build_classifier(self.training_data)
+
+        resultsString = ""
+        resultsString = self.print_both(str(cls),resultsString)
+
+        buildTimeString = "Bayes Split Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Evaluate Classifier
+        resultsString = self.print_both("\nEvaluating on test data.",resultsString)
+
+        buildTimeStart=time.time()
+        evl=Evaluation(self.training_data)
+        evl.test_model(cls, self.testing_data)
+
+        resultsString = self.print_both(str(evl.summary()),resultsString)
+        resultsString = self.print_both(str(evl.class_details()),resultsString)
+        resultsString = self.print_both(str(evl.confusion_matrix),resultsString)
+        buildTimeString = "\nBayes Split Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Save Results and Cleanup
+        self.save_results("Bayes_Hill_P"+str(parents)+"_",resultsString,output_directory)
+        self.save_results("Bayes_Hill_P"+str(parents)+"_Graph",cls.graph,output_directory, True)
+
+    def run_bayes_tan_split(self, output_directory, parents=1):
+        # build classifier
+        print("\nBuilding Bayes Classifier on training data. Parents = "+str(parents)+"\n")
+        buildTimeStart=time.time()
+        cls = Classifier(classname="weka.classifiers.bayes.BayesNet", options=["-D","-Q", "weka.classifiers.bayes.net.search.local.TAN", "--","-S", "BAYES", "-E", "weka.classifiers.bayes.net.estimate.SimpleEstimator", "--", "-A", "0.5"])
+        cls.build_classifier(self.training_data)
+
+        resultsString = ""
+        resultsString = self.print_both(str(cls),resultsString)
+
+        buildTimeString = "Bayes Split Classifier Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Evaluate Classifier
+        resultsString = self.print_both("\nEvaluating on test data.",resultsString)
+
+        buildTimeStart=time.time()
+        evl=Evaluation(self.training_data)
+        evl.test_model(cls, self.testing_data)
+
+        resultsString = self.print_both(str(evl.summary()),resultsString)
+        resultsString = self.print_both(str(evl.class_details()),resultsString)
+        resultsString = self.print_both(str(evl.confusion_matrix),resultsString)
+        buildTimeString = "\nBayes Split Classifier Evaluated in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+        
+        #Save Results and Cleanup
+        self.save_results("Bayes_TAN_P"+str(parents)+"_",resultsString,output_directory)
+        self.save_results("Bayes_TAN_P"+str(parents)+"_Graph",cls.graph,output_directory, True)
 
     def run_ibk_split(self, output_directory):
         # build classifier

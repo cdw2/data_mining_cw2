@@ -43,7 +43,7 @@ LogScore BDeu: -842943.2002112457
 LogScore MDL: -830315.4867759934
 LogScore ENTROPY: -775746.7426661135
 LogScore AIC: -786378.7426661135
-Bayes Split Classifier Built in 2.315403938293457 secs.
+Bayes Split Classifier Built in 2.513653516769409 secs.
 
 Evaluating on test data.
 Correctly Classified Instances        2305               32.1165 %
@@ -72,4 +72,4 @@ Weighted Avg.    0.321    0.159    0.304      0.321    0.303      0.161    0.649
  [6.400e+01 4.000e+00 8.100e+01 3.900e+02 3.930e+02 2.250e+02 8.500e+01]
  [7.700e+01 1.000e+00 1.120e+02 3.720e+02 2.460e+02 3.160e+02 8.400e+01]
  [3.100e+01 3.000e+00 9.600e+01 1.830e+02 1.020e+02 7.700e+01 3.010e+02]]
-Bayes Split Classifier Evaluated in 0.14235544204711914 secs.
+Bayes Split Classifier Evaluated in 0.2328948974609375 secs.
