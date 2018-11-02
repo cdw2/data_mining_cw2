@@ -22,14 +22,15 @@ filename="fer2018/transformed_arffs/transformed_70.arff"
 testNum = "_70_pixels"
 
 class myThread (threading.Thread):
-   def __init__(self, threadID, name, function):
+   def __init__(self, threadID, name, function, args=None):
       threading.Thread.__init__(self)
       self.threadID = threadID
       self.name = name
       self.function = function
+      self.args = args
    def run(self):
       print ("Starting " + self.name)
-      self.function()
+      self.function(self.args)
 
 def convert_to_arff():
 
@@ -99,13 +100,13 @@ def run_nb_crossval():
     naiveBayesCls_crossval.load_data(filename)
     naiveBayesCls_crossval.run_naive_bayes_crossval("results/test"+str(testNum))
 
-def run_bayes_split():
+def run_bayes_split(parents=1):
     global filename, testNum
     jvm_helper = classify.cw2_helper()
 
     naiveBayesCls_crossval = classify.cw2_classifier()
     naiveBayesCls_crossval.load_data_split(filename,80)
-    naiveBayesCls_crossval.run_bayes_split("results/test"+str(testNum))
+    naiveBayesCls_crossval.run_bayes_split("results/test"+str(testNum),parents)
 
 def run_classifiers():
 
@@ -114,24 +115,29 @@ def run_classifiers():
 
     threads = []
 
+    #TASK 1
     # Create new threads
-    thread1 = myThread(1, "run_bayes_split", run_bayes_split)
     # thread1 = myThread(1, "IBK-Cross-Val", run_ibk_crossval)
     # thread2 = myThread(2, "IBK-Split", run_ibk_split)
     # thread3 = myThread(3, "run_nb_split", run_nb_split)
     # thread4 = myThread(4, "run_nb_crossval", run_nb_crossval)
 
+    #TASK2
+    thread1 = myThread(1, "run_bayes_split", run_bayes_split, (1))
+    thread2 = myThread(2, "run_bayes_split", run_bayes_split, (2))
+    thread3 = myThread(3, "run_bayes_split", run_bayes_split, (3))
+
     # Start new Threads
     thread1.start()
-    # thread2.start()
-    # thread3.start()
+    thread2.start()
+    thread3.start()
     # thread4.start()
 
     # Add threads to thread list
     threads.append(thread1)
-    # threads.append(thread2)
-    # threads.append(thread3)
-    # threads.append(thread4)
+    threads.append(thread2)
+    threads.append(thread3)
+    #threads.append(thread4)
 
     # Wait for all threads to complete
     for t in threads:
@@ -147,8 +153,7 @@ try:
         reduce_attr()
         extract()
     else:
-        # run_classifiers()
-        run_bayes_split()
+        run_classifiers()
 
 except Exception as e:
     print(e)

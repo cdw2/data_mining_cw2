@@ -97,7 +97,7 @@ class cw2_classifier():
 
     def run_bayes_split(self, output_directory, parents=1):
         # build classifier
-        print("\nBuilding Bayes Classifier on training data.")
+        print("\nBuilding Bayes Classifier on training data. Parents = "+str(parents)+"\n")
         buildTimeStart=time.time()
         cls = Classifier(classname="weka.classifiers.bayes.BayesNet", options=["-D","-Q", "weka.classifiers.bayes.net.search.local.K2", "--", "-P", ""+str(parents),"-S", "BAYES", "-E", "weka.classifiers.bayes.net.estimate.SimpleEstimator", "--", "-A", "0.5"])
         cls.build_classifier(self.training_data)
@@ -122,8 +122,8 @@ class cw2_classifier():
         resultsString = self.print_both(buildTimeString,resultsString)
         
         #Save Results and Cleanup
-        self.save_results("Bayes",resultsString,output_directory)
-        self.save_results("Bayes_Graph",cls.graph,output_directory, True)
+        self.save_results("Bayes_P"+str(parents)+"_",resultsString,output_directory)
+        self.save_results("Bayes_"+str(parents)+"_Graph",cls.graph,output_directory, True)
 
     def run_ibk_split(self, output_directory):
         # build classifier
