@@ -18,8 +18,8 @@ if(len(sys.argv)==2):
     if sys.argv[1]=="--preprocess":
         preprocess=True
 
-filename="fer2018/transformed_arffs/transformed_70.arff"
-testNum = "_70_pixels"
+filename="fer2018/transformed_arffs/transformed_14.arff"
+testNum = "_14_pixels"
 
 class myThread (threading.Thread):
    def __init__(self, threadID, name, function, args=None):
