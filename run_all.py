@@ -99,6 +99,14 @@ def run_nb_crossval():
     naiveBayesCls_crossval.load_data(filename)
     naiveBayesCls_crossval.run_naive_bayes_crossval("results/test"+str(testNum))
 
+def run_bayes_split():
+    global filename, testNum
+    jvm_helper = classify.cw2_helper()
+
+    naiveBayesCls_crossval = classify.cw2_classifier()
+    naiveBayesCls_crossval.load_data_split(filename,80)
+    naiveBayesCls_crossval.run_bayes_split("results/test"+str(testNum))
+
 def run_classifiers():
 
     jvm_helper = classify.cw2_helper(False)
@@ -107,22 +115,23 @@ def run_classifiers():
     threads = []
 
     # Create new threads
-    thread1 = myThread(1, "IBK-Cross-Val", run_ibk_crossval)
-    thread2 = myThread(2, "IBK-Split", run_ibk_split)
-    thread3 = myThread(3, "run_nb_split", run_nb_split)
-    thread4 = myThread(4, "run_nb_crossval", run_nb_crossval)
+    thread1 = myThread(1, "run_bayes_split", run_bayes_split)
+    # thread1 = myThread(1, "IBK-Cross-Val", run_ibk_crossval)
+    # thread2 = myThread(2, "IBK-Split", run_ibk_split)
+    # thread3 = myThread(3, "run_nb_split", run_nb_split)
+    # thread4 = myThread(4, "run_nb_crossval", run_nb_crossval)
 
     # Start new Threads
     thread1.start()
-    thread2.start()
-    thread3.start()
-    thread4.start()
+    # thread2.start()
+    # thread3.start()
+    # thread4.start()
 
     # Add threads to thread list
     threads.append(thread1)
-    threads.append(thread2)
-    threads.append(thread3)
-    threads.append(thread4)
+    # threads.append(thread2)
+    # threads.append(thread3)
+    # threads.append(thread4)
 
     # Wait for all threads to complete
     for t in threads:
@@ -138,7 +147,8 @@ try:
         reduce_attr()
         extract()
     else:
-        run_classifiers()
+        # run_classifiers()
+        run_bayes_split()
 
 except Exception as e:
     print(e)
