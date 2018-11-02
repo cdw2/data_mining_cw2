@@ -18,8 +18,8 @@ if(len(sys.argv)==2):
     if sys.argv[1]=="--preprocess":
         preprocess=True
 
-filename="fer2018/transformed_arffs/transformed_70.arff"
-testNum = "_70_pixels"
+filename="fer2018/reduced_arffs/fer2018.reduced.arff"
+testNum = "task_5_clustering"
 
 class myThread (threading.Thread):
    def __init__(self, threadID, name, function, args=None):
@@ -104,17 +104,34 @@ def run_bayes_split(parents=1):
     global filename, testNum
     jvm_helper = classify.cw2_helper()
 
-    naiveBayesCls_crossval = classify.cw2_classifier()
-    naiveBayesCls_crossval.load_data_split(filename,80)
-    naiveBayesCls_crossval.run_bayes_split("results/test"+str(testNum),parents)
+    BayesCls_split = classify.cw2_classifier()
+    BayesCls_split.load_data_split(filename,80)
+    BayesCls_split.run_bayes_split("results/test"+str(testNum),parents)
 
-    naiveBayesCls_crossval = classify.cw2_classifier()
-    naiveBayesCls_crossval.load_data_split(filename,80)
-    naiveBayesCls_crossval.run_bayes_hill_split("results/test"+str(testNum),parents)
+    BayesCls_split = classify.cw2_classifier()
+    BayesCls_split.load_data_split(filename,80)
+    BayesCls_split.run_bayes_hill_split("results/test"+str(testNum),parents)
 
-    naiveBayesCls_crossval = classify.cw2_classifier()
-    naiveBayesCls_crossval.load_data_split(filename,80)
-    naiveBayesCls_crossval.run_bayes_tan_split("results/test"+str(testNum),parents)
+    BayesCls_split = classify.cw2_classifier()
+    BayesCls_split.load_data_split(filename,80)
+    BayesCls_crossval.run_bayes_tan_split("results/test"+str(testNum),parents)
+
+def run_simplekm_noclass(args):
+    global filename, testNum
+    jvm_helper = classify.cw2_helper()
+
+    simplek_full = classify.cw2_classifier()
+    simplek_full.load_data(filename)
+    simplek_full.run_cluster_simplek("results/"+str(testNum),True)
+
+def run_simplekm_with_class(args):
+    global filename, testNum
+    jvm_helper = classify.cw2_helper()
+
+    simplek_full = classify.cw2_classifier()
+    simplek_full.load_data(filename)
+    simplek_full.run_cluster_simplek("results/"+str(testNum),False)
+
 
 def run_classifiers():
 
@@ -130,21 +147,26 @@ def run_classifiers():
     # thread3 = myThread(3, "run_nb_split", run_nb_split)
     # thread4 = myThread(4, "run_nb_crossval", run_nb_crossval)
 
-    #TASK2
-    thread1 = myThread(1, "run_bayes_split", run_bayes_split, (1))
-    thread2 = myThread(2, "run_bayes_split", run_bayes_split, (2))
-    thread3 = myThread(3, "run_bayes_split", run_bayes_split, (3))
+    #TASK3
+    # thread1 = myThread(1, "run_bayes_split", run_bayes_split, (1))
+    # thread2 = myThread(2, "run_bayes_split", run_bayes_split, (2))
+    # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (3))
+
+    #TASK5
+    thread1 = myThread(1, "run_simplekm_noclass", run_simplekm_noclass)
+    thread2 = myThread(2, "run_bayes_split", run_simplekm_with_class)
+    # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (3))
 
     # Start new Threads
     thread1.start()
     thread2.start()
-    thread3.start()
+    # thread3.start()
     # thread4.start()
 
     # Add threads to thread list
     threads.append(thread1)
     threads.append(thread2)
-    threads.append(thread3)
+    # threads.append(thread3)
     #threads.append(thread4)
 
     # Wait for all threads to complete

@@ -3,11 +3,12 @@ import sys
 import traceback
 import weka.core.jvm as jvm
 from weka.core.classes import Random
-from weka.core.converters import Loader
+from weka.core.converters import Loader, Instances
 from weka.classifiers import Classifier, Evaluation
 import time
 from weka.filters import Filter
 from weka.attribute_selection import ASSearch, ASEvaluation, AttributeSelection
+from weka.clusterers import Clusterer, ClusterEvaluation
 
 class cw2_classifier():
     def __init__(self):
@@ -242,6 +243,53 @@ class cw2_classifier():
         
         #Save Results and Cleanup
         self.save_results("IBK_Crossval",resultsString,output_directory)
+
+    def run_cluster_simplek(self, output_directory, exc_class=False):
+        clsexc = ""
+
+        data = Instances.copy_instances(self.training_data)
+        data.no_class()
+        data.delete_first_attribute()
+
+        # build a clusterer and output model
+        print("\nBuilding Clusterer on training data.")
+        buildTimeStart=time.time()
+        clusterer = Clusterer(classname="weka.clusterers.SimpleKMeans", options=["-N", "7"])
+        clusterer.build_clusterer(data)
+
+        resultsString = ""
+        resultsString = self.print_both(str(clusterer),resultsString)
+
+        buildTimeString = "Clusterer Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+
+        #Evaluate Clusterer
+        resultsString = self.print_both("\nClustering data.",resultsString)
+
+        buildTimeStart=time.time()
+
+        if(exc_class):
+            # no class attribute
+            evl = ClusterEvaluation()
+            evl.set_model(clusterer)
+            evl.test_model(data)
+        else:
+            # classes to clusters
+            evl = ClusterEvaluation()
+            evl.set_model(clusterer)
+            evl.test_model(self.training_data)
+
+        resultsString = self.print_both("\nCluster results\n",resultsString)
+        resultsString = self.print_both(str(evl.cluster_results),resultsString)
+
+        resultsString = self.print_both("\nClasses to clusters\n",resultsString)
+        resultsString = self.print_both(str(evl.classes_to_clusters),resultsString)
+
+        buildTimeString = "\nClustered data in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+
+        #Save Results and Cleanup
+        self.save_results("SimpleKM"+clsexc+"_",resultsString,output_directory)
 
     def save_results(self, classifier, string, output_directory, bif=False):
         try:
