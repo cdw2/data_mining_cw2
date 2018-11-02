@@ -11,7 +11,7 @@ class Convert:
     def __init__(self,filename, skip):
         self.command = skip
         self.filename = filename
-        self.emotion_name=self.filename[7:-4]
+        self.emotion_name=os.path.basename(self.filename)[7:-4]
 
     def output_header(self, output_file):
         emotions_full = "{angry,disgust,fear,happy,neutral,sad,suprise}"

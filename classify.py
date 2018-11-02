@@ -14,23 +14,25 @@ class cw2_classifier():
         pass
         # jvm.start()
 
-    def load_data(self, filename):
+    def load_data(self, filename, filter=False):
         self.filename = filename
         print("\nLoading dataset: " + filename)
         loader = Loader(classname="weka.core.converters.ArffLoader")
         data = loader.load_file(filename)
         data.class_is_first()
-        data = self.filter_data(data)
+        if(filter):
+            data = self.filter_data(data)
         self.training_data = data
 
-    def load_data_split(self, filename, validation_split):
+    def load_data_split(self, filename, validation_split, filter=False):
         self.validation_split = validation_split    
         self.filename = filename
         print("\nLoading dataset: " + filename)
         loader = Loader(classname="weka.core.converters.ArffLoader")
         data = loader.load_file(filename)
         data.class_is_first()
-        data = self.filter_data(data)
+        if(filter):
+            data = self.filter_data(data)
         train, test = data.train_test_split(self.validation_split, Random(1))
         self.training_data = train
         self.testing_data = test

@@ -18,6 +18,9 @@ if(len(sys.argv)==2):
     if sys.argv[1]=="--preprocess":
         preprocess=True
 
+filename="fer2018/transformed_arffs/transformed_70.arff"
+testNum = "_70_pixels"
+
 class myThread (threading.Thread):
    def __init__(self, threadID, name, function):
       threading.Thread.__init__(self)
@@ -65,36 +68,36 @@ def extract():
         extractor.run()
 
 def run_ibk_crossval():
+    global filename, testNum
     jvm_helper = classify.cw2_helper()
 
-    filename="fer2018/reduced_arffs/fer2018.reduced.arff"
     ibkCls_crossval = classify.cw2_classifier()
     ibkCls_crossval.load_data(filename)
-    ibkCls_crossval.run_ibk_crossval("results/test1")
+    ibkCls_crossval.run_ibk_crossval("results/test"+str(testNum))
 
 def run_ibk_split():
+    global filename, testNum
     jvm_helper = classify.cw2_helper()
 
-    filename="fer2018/reduced_arffs/fer2018.reduced.arff"
     ibkCls = classify.cw2_classifier()
     ibkCls.load_data_split(filename,80)
-    ibkCls.run_ibk_split("results/test1")
+    ibkCls.run_ibk_split("results/test"+str(testNum))
 
 def run_nb_split():
+    global filename, testNum
     jvm_helper = classify.cw2_helper()
 
-    filename="fer2018/reduced_arffs/fer2018.reduced.arff"
     naiveBayesCls = classify.cw2_classifier()
     naiveBayesCls.load_data_split(filename,80)
-    naiveBayesCls.run_naive_bayes_split("results/test2")
+    naiveBayesCls.run_naive_bayes_split("results/test"+str(testNum))
 
 def run_nb_crossval():
+    global filename, testNum
     jvm_helper = classify.cw2_helper()
 
-    filename="fer2018/reduced_arffs/fer2018.reduced.arff"
     naiveBayesCls_crossval = classify.cw2_classifier()
-    naiveBayesCls_crossval.load_data_split(filename,80)
-    naiveBayesCls_crossval.run_naive_bayes_crossval("results/test2")
+    naiveBayesCls_crossval.load_data(filename)
+    naiveBayesCls_crossval.run_naive_bayes_crossval("results/test"+str(testNum))
 
 def run_classifiers():
 
@@ -133,9 +136,10 @@ try:
         print("***** Preprocessing Data ******")
         convert_to_arff()
         reduce_attr()
-        # extract()
-        
-    run_classifiers()
+        extract()
+    else:
+        run_classifiers()
+
 except Exception as e:
     print(e)
 
