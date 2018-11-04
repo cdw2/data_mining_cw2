@@ -333,7 +333,7 @@ class cw2_helper():
     def __init__(self, start=True):
         if(start):
             #increased to 4gb for bayes network.
-            jvm.start(max_heap_size="3g")
+            jvm.start(max_heap_size="4g")
 
     def cleanup(self):
         jvm.stop()

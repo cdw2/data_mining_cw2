@@ -18,8 +18,17 @@ if(len(sys.argv)==2):
     if sys.argv[1]=="--preprocess":
         preprocess=True
 
-filename="fer2018/reduced_arffs/fer2018.reduced.arff"
-testNum = "task_5_clustering"
+#task1
+filename="fer2018/arffs/fer2018.arff"
+testNum = "task1_full"
+
+# #task3
+# filename="fer2018/reduced_arffs/fer2018.reduced.arff"
+# testNum = "task_5_clustering"
+
+# #task5
+# filename="fer2018/reduced_arffs/fer2018.reduced.arff"
+# testNum = "task_5_clustering"
 
 class myThread (threading.Thread):
    def __init__(self, threadID, name, function, args=None):
@@ -68,37 +77,37 @@ def extract():
         extractor = extract_pixels.extract_pix(filename)
         extractor.run()
 
-def run_ibk_crossval():
+def run_ibk_crossval(args):
     global filename, testNum
     jvm_helper = classify.cw2_helper()
 
     ibkCls_crossval = classify.cw2_classifier()
     ibkCls_crossval.load_data(filename)
-    ibkCls_crossval.run_ibk_crossval("results/test"+str(testNum))
+    ibkCls_crossval.run_ibk_crossval("results/"+str(testNum))
 
-def run_ibk_split():
+def run_ibk_split(args):
     global filename, testNum
     jvm_helper = classify.cw2_helper()
 
     ibkCls = classify.cw2_classifier()
     ibkCls.load_data_split(filename,80)
-    ibkCls.run_ibk_split("results/test"+str(testNum))
+    ibkCls.run_ibk_split("results/"+str(testNum))
 
-def run_nb_split():
+def run_nb_split(args):
     global filename, testNum
     jvm_helper = classify.cw2_helper()
 
     naiveBayesCls = classify.cw2_classifier()
     naiveBayesCls.load_data_split(filename,80)
-    naiveBayesCls.run_naive_bayes_split("results/test"+str(testNum))
+    naiveBayesCls.run_naive_bayes_split("results/"+str(testNum))
 
-def run_nb_crossval():
+def run_nb_crossval(args):
     global filename, testNum
     jvm_helper = classify.cw2_helper()
 
     naiveBayesCls_crossval = classify.cw2_classifier()
     naiveBayesCls_crossval.load_data(filename)
-    naiveBayesCls_crossval.run_naive_bayes_crossval("results/test"+str(testNum))
+    naiveBayesCls_crossval.run_naive_bayes_crossval("results/"+str(testNum))
 
 def run_bayes_split(parents=1):
     global filename, testNum
@@ -106,15 +115,15 @@ def run_bayes_split(parents=1):
 
     BayesCls_split = classify.cw2_classifier()
     BayesCls_split.load_data_split(filename,80)
-    BayesCls_split.run_bayes_split("results/test"+str(testNum),parents)
+    BayesCls_split.run_bayes_split("results/"+str(testNum),parents)
 
     BayesCls_split = classify.cw2_classifier()
     BayesCls_split.load_data_split(filename,80)
-    BayesCls_split.run_bayes_hill_split("results/test"+str(testNum),parents)
+    BayesCls_split.run_bayes_hill_split("results/"+str(testNum),parents)
 
     BayesCls_split = classify.cw2_classifier()
     BayesCls_split.load_data_split(filename,80)
-    BayesCls_crossval.run_bayes_tan_split("results/test"+str(testNum),parents)
+    BayesCls_crossval.run_bayes_tan_split("results/"+str(testNum),parents)
 
 def run_simplekm_noclass(args):
     global filename, testNum
@@ -142,10 +151,10 @@ def run_classifiers():
 
     #TASK 1
     # Create new threads
-    # thread1 = myThread(1, "IBK-Cross-Val", run_ibk_crossval)
-    # thread2 = myThread(2, "IBK-Split", run_ibk_split)
-    # thread3 = myThread(3, "run_nb_split", run_nb_split)
-    # thread4 = myThread(4, "run_nb_crossval", run_nb_crossval)
+    thread1 = myThread(1, "IBK-Cross-Val", run_ibk_crossval)
+    thread2 = myThread(2, "IBK-Split", run_ibk_split)
+    thread3 = myThread(3, "run_nb_split", run_nb_split)
+    thread4 = myThread(4, "run_nb_crossval", run_nb_crossval)
 
     #TASK3
     # thread1 = myThread(1, "run_bayes_split", run_bayes_split, (1))
@@ -153,21 +162,21 @@ def run_classifiers():
     # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (3))
 
     #TASK5
-    thread1 = myThread(1, "run_simplekm_noclass", run_simplekm_noclass)
-    thread2 = myThread(2, "run_bayes_split", run_simplekm_with_class)
+    # thread1 = myThread(1, "run_simplekm_noclass", run_simplekm_noclass)
+    # thread2 = myThread(2, "run_bayes_split", run_simplekm_with_class)
     # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (3))
 
     # Start new Threads
     thread1.start()
-    thread2.start()
+    # thread2.start()
     # thread3.start()
     # thread4.start()
 
     # Add threads to thread list
     threads.append(thread1)
-    threads.append(thread2)
+    # threads.append(thread2)
     # threads.append(thread3)
-    #threads.append(thread4)
+    # threads.append(thread4)
 
     # Wait for all threads to complete
     for t in threads:
