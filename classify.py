@@ -291,6 +291,84 @@ class cw2_classifier():
         #Save Results and Cleanup
         self.save_results("SimpleKM"+clsexc+"_",resultsString,output_directory)
 
+    def run_clustering_task7_auto(self, output_directory, clusterer_name):
+        data = Instances.copy_instances(self.training_data)
+        data.no_class()
+        data.delete_first_attribute()
+
+        # build a clusterer and output model
+        print("\nBuilding Clusterer on training data.")
+        buildTimeStart=time.time()
+        clusterer = Clusterer(classname=clusterer_name)
+        clusterer.build_clusterer(data)
+
+        resultsString = ""
+        resultsString = self.print_both(str(clusterer),resultsString)
+
+        buildTimeString = "Clusterer Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+
+        #Evaluate Clusterer
+        resultsString = self.print_both("\nClustering data.",resultsString)
+
+        buildTimeStart=time.time()
+
+        evl = ClusterEvaluation()
+        evl.set_model(clusterer)
+        evl.test_model(self.training_data)
+
+        resultsString = self.print_both("\nCluster results\n",resultsString)
+        resultsString = self.print_both(str(evl.cluster_results),resultsString)
+
+        resultsString = self.print_both("\nClasses to clusters\n",resultsString)
+        resultsString = self.print_both(str(evl.classes_to_clusters),resultsString)
+
+        buildTimeString = "\nClustered data in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+
+        clusterer_name = clusterer_name.replace("weka.clusterers.","")
+        #Save Results and Cleanup
+        self.save_results(clusterer_name+"_",resultsString,output_directory)
+
+    def run_clustering_task7_manual(self, output_directory, clusterer_name, num_clusters):
+        data = Instances.copy_instances(self.training_data)
+        data.no_class()
+        data.delete_first_attribute()
+
+        # build a clusterer and output model
+        print("\nBuilding Clusterer on training data.")
+        buildTimeStart=time.time()
+        clusterer = Clusterer(classname=clusterer_name, options=["-N", ""+str(num_clusters)])
+        clusterer.build_clusterer(data)
+
+        resultsString = ""
+        resultsString = self.print_both(str(clusterer),resultsString)
+
+        buildTimeString = "Clusterer Built in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+
+        #Evaluate Clusterer
+        resultsString = self.print_both("\nClustering data.",resultsString)
+
+        buildTimeStart=time.time()
+
+        evl = ClusterEvaluation()
+        evl.set_model(clusterer)
+        evl.test_model(self.training_data)
+
+        resultsString = self.print_both("\nCluster results\n",resultsString)
+        resultsString = self.print_both(str(evl.cluster_results),resultsString)
+
+        resultsString = self.print_both("\nClasses to clusters\n",resultsString)
+        resultsString = self.print_both(str(evl.classes_to_clusters),resultsString)
+
+        buildTimeString = "\nClustered data in "+str(time.time()-buildTimeStart)+" secs.\n"
+        resultsString = self.print_both(buildTimeString,resultsString)
+
+        clusterer_name = clusterer_name.replace("weka.clusterers.","")
+        #Save Results and Cleanup
+        self.save_results(clusterer_name+"_"+"N"+str(num_clusters)+"_",resultsString,output_directory)
+
     def save_results(self, classifier, string, output_directory, bif=False):
         try:
             os.mkdir(output_directory)

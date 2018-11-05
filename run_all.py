@@ -19,8 +19,8 @@ if(len(sys.argv)==2):
         preprocess=True
 
 #task1
-filename="fer2018/arffs/fer2018.arff"
-testNum = "task1_full"
+filename="fer2018/transformed_arffs/transformed_14.arff"
+testNum = "task7_auto_clusters_14"
 
 # #task3
 # filename="fer2018/reduced_arffs/fer2018.reduced.arff"
@@ -141,6 +141,28 @@ def run_simplekm_with_class(args):
     simplek_full.load_data(filename)
     simplek_full.run_cluster_simplek("results/"+str(testNum),False)
 
+def run_clusters_auto(args):
+    global filename, testNum
+    jvm_helper = classify.cw2_helper()
+
+    simplek_full = classify.cw2_classifier()
+    simplek_full.load_data(filename)
+
+    #simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
+    #simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Cobweb")
+    simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.EM")
+
+def run_clusters_manual(args):
+    global filename, testNum
+    jvm_helper = classify.cw2_helper()
+
+    simplek_full = classify.cw2_classifier()
+    simplek_full.load_data(filename)
+
+    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", 7)
+    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", 7)
+    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.SimpleKMeans", 7)
+    
 
 def run_classifiers():
 
@@ -151,30 +173,34 @@ def run_classifiers():
 
     #TASK 1
     # Create new threads
-    thread1 = myThread(1, "IBK-Cross-Val", run_ibk_crossval)
-    thread2 = myThread(2, "IBK-Split", run_ibk_split)
-    thread3 = myThread(3, "run_nb_split", run_nb_split)
-    thread4 = myThread(4, "run_nb_crossval", run_nb_crossval)
+    # thread1 = myThread(1, "IBK-Cross-Val", run_ibk_crossval)
+    # thread2 = myThread(2, "IBK-Split", run_ibk_split)
+    # thread3 = myThread(3, "run_nb_split", run_nb_split)
+    # thread4 = myThread(4, "run_nb_crossval", run_nb_crossval)
 
     #TASK3
     # thread1 = myThread(1, "run_bayes_split", run_bayes_split, (1))
-    # thread2 = myThread(2, "run_bayes_split", run_bayes_split, (2))
-    # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (3))
+    # thread2 = myThread(2, "run_bayes_split", run_bayes_split, (3))
+    # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (5))
 
     #TASK5
     # thread1 = myThread(1, "run_simplekm_noclass", run_simplekm_noclass)
     # thread2 = myThread(2, "run_bayes_split", run_simplekm_with_class)
     # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (3))
 
+    #TASK7
+    # thread1 = myThread(1, "run_clusters_auto", run_clusters_auto)
+    thread2 = myThread(2, "run_clusters_manual", run_clusters_manual)
+
     # Start new Threads
-    thread1.start()
-    # thread2.start()
+    # thread1.start()
+    thread2.start()
     # thread3.start()
     # thread4.start()
 
     # Add threads to thread list
-    threads.append(thread1)
-    # threads.append(thread2)
+    # threads.append(thread1)
+    threads.append(thread2)
     # threads.append(thread3)
     # threads.append(thread4)
 
