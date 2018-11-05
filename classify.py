@@ -270,6 +270,7 @@ class cw2_classifier():
 
         if(exc_class):
             # no class attribute
+            clsexc = "_NO_Class"
             evl = ClusterEvaluation()
             evl.set_model(clusterer)
             evl.test_model(data)
@@ -411,7 +412,7 @@ class cw2_helper():
     def __init__(self, start=True):
         if(start):
             #increased to 4gb for bayes network.
-            jvm.start(max_heap_size="4g")
+            jvm.start(max_heap_size="6g")
 
     def cleanup(self):
         jvm.stop()

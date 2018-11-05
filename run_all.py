@@ -19,8 +19,8 @@ if(len(sys.argv)==2):
         preprocess=True
 
 #task1
-filename="fer2018/transformed_arffs/transformed_14.arff"
-testNum = "task7_auto_clusters_14"
+filename="fer2018/transformed_arffs/transformed_70.arff"
+testNum = "task5_P70"
 
 # #task3
 # filename="fer2018/reduced_arffs/fer2018.reduced.arff"
@@ -123,7 +123,7 @@ def run_bayes_split(parents=1):
 
     BayesCls_split = classify.cw2_classifier()
     BayesCls_split.load_data_split(filename,80)
-    BayesCls_crossval.run_bayes_tan_split("results/"+str(testNum),parents)
+    BayesCls_split.run_bayes_tan_split("results/"+str(testNum),parents)
 
 def run_simplekm_noclass(args):
     global filename, testNum
@@ -159,7 +159,7 @@ def run_clusters_manual(args):
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
 
-    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", 7)
+    # simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", 7)
     simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", 7)
     simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.SimpleKMeans", 7)
     
@@ -184,22 +184,21 @@ def run_classifiers():
     # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (5))
 
     #TASK5
-    # thread1 = myThread(1, "run_simplekm_noclass", run_simplekm_noclass)
-    # thread2 = myThread(2, "run_bayes_split", run_simplekm_with_class)
-    # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (3))
+    thread1 = myThread(1, "run_simplekm_noclass", run_simplekm_noclass)
+    thread2 = myThread(2, "run_simplekm_with_class", run_simplekm_with_class)
 
     #TASK7
     # thread1 = myThread(1, "run_clusters_auto", run_clusters_auto)
-    thread2 = myThread(2, "run_clusters_manual", run_clusters_manual)
+    # thread2 = myThread(2, "run_clusters_manual", run_clusters_manual)
 
     # Start new Threads
-    # thread1.start()
+    thread1.start()
     thread2.start()
     # thread3.start()
     # thread4.start()
 
     # Add threads to thread list
-    # threads.append(thread1)
+    threads.append(thread1)
     threads.append(thread2)
     # threads.append(thread3)
     # threads.append(thread4)
