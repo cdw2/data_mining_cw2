@@ -4,7 +4,7 @@ Number of clusters: 1
 
 leaf 0 [35887]
 
-Clusterer Built in 89.05264592170715 secs.
+Clusterer Built in 78.51850056648254 secs.
 
 Clustering data.
 Cluster results
@@ -37,4 +37,4 @@ Incorrectly clustered instances :	26898.0	 74.9519 %
 
 Classes to clusters
 [3]
-Clustered data in 0.05887317657470703 secs.
+Clustered data in 0.0125885009765625 secs.

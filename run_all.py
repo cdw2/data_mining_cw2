@@ -19,16 +19,21 @@ if(len(sys.argv)==2):
         preprocess=True
 
 #task1
-filename="fer2018/transformed_arffs/transformed_70.arff"
-testNum = "task5_P70"
+# filename="fer2018/transformed_arffs/transformed_14.arff"
+# testNum = "task1_P14"
 
 # #task3
 # filename="fer2018/reduced_arffs/fer2018.reduced.arff"
 # testNum = "task_5_clustering"
 
 # #task5
-# filename="fer2018/reduced_arffs/fer2018.reduced.arff"
-# testNum = "task_5_clustering"
+filename="fer2018/reduced_arffs/fer2018surprise.reduced.arff"
+testNum = "surprise"
+
+#task7
+# filename="fer2018/transformed_arffs/transformed_35.arff"
+# testNum = "task_7_clustering_35_pixels"
+
 
 class myThread (threading.Thread):
    def __init__(self, threadID, name, function, args=None):
@@ -131,7 +136,7 @@ def run_simplekm_noclass(args):
 
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
-    simplek_full.run_cluster_simplek("results/"+str(testNum),True)
+    simplek_full.run_cluster_simplek("results/"+str(testNum),True, 7)
 
 def run_simplekm_with_class(args):
     global filename, testNum
@@ -139,7 +144,7 @@ def run_simplekm_with_class(args):
 
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
-    simplek_full.run_cluster_simplek("results/"+str(testNum),False)
+    simplek_full.run_cluster_simplek("results/"+str(testNum),False, 2)
 
 def run_clusters_auto(args):
     global filename, testNum
@@ -150,7 +155,7 @@ def run_clusters_auto(args):
 
     simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
     simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Cobweb")
-    simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.EM")
+    # simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.EM")
 
 def run_clusters_manual(args):
     global filename, testNum
@@ -160,7 +165,7 @@ def run_clusters_manual(args):
     simplek_full.load_data(filename)
 
     simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", 7)
-    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", 7)
+    # simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", 7)
     simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.SimpleKMeans", 7)
     
 

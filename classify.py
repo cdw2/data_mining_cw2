@@ -244,7 +244,7 @@ class cw2_classifier():
         #Save Results and Cleanup
         self.save_results("IBK_Crossval",resultsString,output_directory)
 
-    def run_cluster_simplek(self, output_directory, exc_class=False):
+    def run_cluster_simplek(self, output_directory, exc_class=False, num_clusters=7):
         clsexc = ""
 
         data = Instances.copy_instances(self.training_data)
@@ -254,7 +254,7 @@ class cw2_classifier():
         # build a clusterer and output model
         print("\nBuilding Clusterer on training data.")
         buildTimeStart=time.time()
-        clusterer = Clusterer(classname="weka.clusterers.SimpleKMeans", options=["-N", "7"])
+        clusterer = Clusterer(classname="weka.clusterers.SimpleKMeans", options=["-N", ""+str(num_clusters)])
         clusterer.build_clusterer(data)
 
         resultsString = ""
