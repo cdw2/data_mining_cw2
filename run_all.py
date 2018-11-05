@@ -27,12 +27,12 @@ if(len(sys.argv)==2):
 # testNum = "task_5_clustering"
 
 # #task5
-filename="fer2018/reduced_arffs/fer2018surprise.reduced.arff"
-testNum = "surprise"
+# filename="fer2018/reduced_arffs/fer2018surprise.reduced.arff"
+# testNum = "surprise"
 
 #task7
-# filename="fer2018/transformed_arffs/transformed_35.arff"
-# testNum = "task_7_clustering_35_pixels"
+filename="fer2018/reduced_arffs/fer2018.reduced.arff"
+testNum = "task_7_full_manual"
 
 
 class myThread (threading.Thread):
@@ -135,7 +135,7 @@ def run_simplekm_noclass(args):
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
-    simplek_full.load_data(filename)
+    simplek_full.load_data(filename, True)
     simplek_full.run_cluster_simplek("results/"+str(testNum),True, 7)
 
 def run_simplekm_with_class(args):
@@ -143,8 +143,8 @@ def run_simplekm_with_class(args):
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
-    simplek_full.load_data(filename)
-    simplek_full.run_cluster_simplek("results/"+str(testNum),False, 2)
+    simplek_full.load_data(filename, True)
+    simplek_full.run_cluster_simplek("results/"+str(testNum),False, 7)
 
 def run_clusters_auto(args):
     global filename, testNum
@@ -155,19 +155,18 @@ def run_clusters_auto(args):
 
     simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
     simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Cobweb")
-    # simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.EM")
+    simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.EM")
 
-def run_clusters_manual(args):
+def run_clusters_manual(num_clusters):
     global filename, testNum
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
 
-    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", 7)
-    # simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", 7)
-    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.SimpleKMeans", 7)
-    
+    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", num_clusters)
+    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.SimpleKMeans", num_clusters)
+    # simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", num_clusters)
 
 def run_classifiers():
 
@@ -189,24 +188,29 @@ def run_classifiers():
     # thread3 = myThread(3, "run_bayes_split", run_bayes_split, (5))
 
     #TASK5
-    thread1 = myThread(1, "run_simplekm_noclass", run_simplekm_noclass)
-    thread2 = myThread(2, "run_simplekm_with_class", run_simplekm_with_class)
+    # thread1 = myThread(1, "run_simplekm_noclass", run_simplekm_noclass)
+    # thread2 = myThread(2, "run_simplekm_with_class", run_simplekm_with_class)
 
     #TASK7
     # thread1 = myThread(1, "run_clusters_auto", run_clusters_auto)
-    # thread2 = myThread(2, "run_clusters_manual", run_clusters_manual)
+    thread2 = myThread(2, "run_clusters_manual", run_clusters_manual, (2))
+    # thread3 = myThread(3, "run_clusters_manual", run_clusters_manual (15))
+    # thread4 = myThread(4, "run_clusters_manual", run_clusters_manual (7))
+    # thread5 = myThread(5, "run_clusters_manual", run_clusters_manual (10))
 
     # Start new Threads
-    thread1.start()
+    # thread1.start()
     thread2.start()
-    # thread3.start()
-    # thread4.start()
+    thread3.start()
+    thread4.start()
+    thread5.start()
 
     # Add threads to thread list
-    threads.append(thread1)
+    # threads.append(thread1)
     threads.append(thread2)
-    # threads.append(thread3)
-    # threads.append(thread4)
+    threads.append(thread3)
+    threads.append(thread4)
+    threads.append(thread5)
 
     # Wait for all threads to complete
     for t in threads:

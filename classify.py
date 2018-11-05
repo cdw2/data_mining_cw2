@@ -245,8 +245,6 @@ class cw2_classifier():
         self.save_results("IBK_Crossval",resultsString,output_directory)
 
     def run_cluster_simplek(self, output_directory, exc_class=False, num_clusters=7):
-        clsexc = ""
-
         data = Instances.copy_instances(self.training_data)
         data.no_class()
         data.delete_first_attribute()
@@ -268,6 +266,7 @@ class cw2_classifier():
 
         buildTimeStart=time.time()
 
+        clsexc = ""
         if(exc_class):
             # no class attribute
             clsexc = "_NO_Class"
@@ -297,8 +296,10 @@ class cw2_classifier():
         data.no_class()
         data.delete_first_attribute()
 
+        clusterer_name_short = clusterer_name.replace("weka.clusterers.","")
+
         # build a clusterer and output model
-        print("\nBuilding Clusterer on training data.")
+        print("\nBuilding "+clusterer_name_short+" Clusterer on training data.")
         buildTimeStart=time.time()
         clusterer = Clusterer(classname=clusterer_name)
         clusterer.build_clusterer(data)
@@ -327,17 +328,17 @@ class cw2_classifier():
         buildTimeString = "\nClustered data in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
 
-        clusterer_name = clusterer_name.replace("weka.clusterers.","")
         #Save Results and Cleanup
-        self.save_results(clusterer_name+"_",resultsString,output_directory)
+        self.save_results(clusterer_name_short+"_",resultsString,output_directory)
 
     def run_clustering_task7_manual(self, output_directory, clusterer_name, num_clusters):
         data = Instances.copy_instances(self.training_data)
         data.no_class()
         data.delete_first_attribute()
-
+        
+        clusterer_name_short = clusterer_name.replace("weka.clusterers.","")
         # build a clusterer and output model
-        print("\nBuilding Clusterer on training data.")
+        print("\nBuilding "+clusterer_name_short+" Clusterer on training data.")
         buildTimeStart=time.time()
         clusterer = Clusterer(classname=clusterer_name, options=["-N", ""+str(num_clusters)])
         clusterer.build_clusterer(data)
@@ -366,9 +367,8 @@ class cw2_classifier():
         buildTimeString = "\nClustered data in "+str(time.time()-buildTimeStart)+" secs.\n"
         resultsString = self.print_both(buildTimeString,resultsString)
 
-        clusterer_name = clusterer_name.replace("weka.clusterers.","")
         #Save Results and Cleanup
-        self.save_results(clusterer_name+"_"+"N"+str(num_clusters)+"_",resultsString,output_directory)
+        self.save_results(clusterer_name_short+"_"+"N"+str(num_clusters)+"_",resultsString,output_directory)
 
     def save_results(self, classifier, string, output_directory, bif=False):
         try:
@@ -412,7 +412,7 @@ class cw2_helper():
     def __init__(self, start=True):
         if(start):
             #increased to 4gb for bayes network.
-            jvm.start(max_heap_size="6g")
+            jvm.start(max_heap_size="8g")
 
     def cleanup(self):
         jvm.stop()
