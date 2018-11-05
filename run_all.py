@@ -148,8 +148,8 @@ def run_clusters_auto(args):
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
 
-    #simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
-    #simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Cobweb")
+    simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
+    simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Cobweb")
     simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.EM")
 
 def run_clusters_manual(args):
@@ -159,7 +159,7 @@ def run_clusters_manual(args):
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
 
-    # simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", 7)
+    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", 7)
     simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", 7)
     simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.SimpleKMeans", 7)
     
