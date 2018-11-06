@@ -32,7 +32,7 @@ if(len(sys.argv)==2):
 
 #task7
 filename="fer2018/transformed_arffs/transformed_14.arff"
-testNum = "task7_14Pixels_manual"
+testNum = "task7_14Pixels_auto"
 
 
 class myThread (threading.Thread):
@@ -146,24 +146,26 @@ def run_simplekm_with_class(args):
     simplek_full.load_data(filename, True)
     simplek_full.run_cluster_simplek("results/"+str(testNum),False, 7)
 
-def run_clusters_auto1(args):
+def run_clusters_auto1(num_clusters):
     global filename, testNum
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
 
-    simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.EM")
+    clusterList = [2,4,7,10,15]
+    for clusterNum in clusterList:
+        simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.EM",clusterNum)
 
-def run_clusters_auto2(args):
+def run_clusters_auto2(num_clusters):
     global filename, testNum
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
 
-    simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
-    simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Cobweb")
+    # simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
+    # simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Cobweb")
 
 def run_clusters_manual(num_clusters):
     global filename, testNum
@@ -200,10 +202,10 @@ def run_classifiers():
     # thread2 = myThread(2, "run_simplekm_with_class", run_simplekm_with_class)
 
     #TASK7
-    # thread1 = myThread(1, "run_clusters_auto1", run_clusters_auto1)
+    thread1 = myThread(1, "run_clusters_auto1", run_clusters_auto1)
     # thread1 = myThread(2, "run_clusters_auto2", run_clusters_auto2)
 
-    thread1 = myThread(1, "run_clusters_manual", run_clusters_manual, 4)
+    # thread1 = myThread(1, "run_clusters_manual", run_clusters_manual, 4)
     # thread2 = myThread(2, "run_clusters_manual", run_clusters_manual (15))
     # thread3 = myThread(3, "run_clusters_manual", run_clusters_manual (7))
     # thread4 = myThread(4, "run_clusters_manual", run_clusters_manual (10))
