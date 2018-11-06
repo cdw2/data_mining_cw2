@@ -32,7 +32,7 @@ if(len(sys.argv)==2):
 
 #task7
 filename="fer2018/transformed_arffs/transformed_14.arff"
-testNum = "task7_14Pixels_auto"
+testNum = "task7_14Pixels_manual"
 
 
 class myThread (threading.Thread):
@@ -201,9 +201,9 @@ def run_classifiers():
 
     #TASK7
     # thread1 = myThread(1, "run_clusters_auto1", run_clusters_auto1)
-    thread1 = myThread(2, "run_clusters_auto2", run_clusters_auto2)
+    # thread1 = myThread(2, "run_clusters_auto2", run_clusters_auto2)
 
-    # thread1 = myThread(1, "run_clusters_manual", run_clusters_manual, (2))
+    thread1 = myThread(1, "run_clusters_manual", run_clusters_manual, 4)
     # thread2 = myThread(2, "run_clusters_manual", run_clusters_manual (15))
     # thread3 = myThread(3, "run_clusters_manual", run_clusters_manual (7))
     # thread4 = myThread(4, "run_clusters_manual", run_clusters_manual (10))
