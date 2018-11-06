@@ -301,6 +301,7 @@ class cw2_classifier():
         # build a clusterer and output model
         print("\nBuilding "+clusterer_name_short+" Clusterer on training data.")
         buildTimeStart=time.time()
+        # clusterer = Clusterer(classname=clusterer_name, options=["-num-slots", "4"])
         clusterer = Clusterer(classname=clusterer_name)
         clusterer.build_clusterer(data)
 
