@@ -32,7 +32,7 @@ if(len(sys.argv)==2):
 
 #task7
 filename="fer2018/transformed_arffs/transformed_14.arff"
-testNum = "task7_14Pixels_auto2"
+testNum = "task7_14Pixels_auto"
 
 
 class myThread (threading.Thread):
@@ -151,7 +151,7 @@ def run_clusters_auto1(args):
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
-    simplek_full.load_data(filename, True)
+    simplek_full.load_data(filename)
 
     simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.EM")
 
@@ -160,9 +160,9 @@ def run_clusters_auto2(args):
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
-    simplek_full.load_data(filename, True)
+    simplek_full.load_data(filename)
 
-    # simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
+    simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
     simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Cobweb")
 
 def run_clusters_manual(num_clusters):
@@ -170,11 +170,11 @@ def run_clusters_manual(num_clusters):
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
-    simplek_full.load_data(filename,True)
+    simplek_full.load_data(filename)
 
-    # simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", num_clusters)
-    # simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.SimpleKMeans", num_clusters)
-    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", num_clusters)
+    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", num_clusters)
+    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.SimpleKMeans", num_clusters)
+    # simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", num_clusters)
 
 def run_classifiers():
 
