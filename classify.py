@@ -332,7 +332,7 @@ class cw2_classifier():
         #Save Results and Cleanup
         self.save_results(clusterer_name_short+"_",resultsString,output_directory)
 
-    def run_clustering_task7_manual(self, output_directory, clusterer_name, num_clusters):
+    def run_clustering_task7_manual(self, output_directory, clusterer_name, num_clusters, seed=10):
         data = Instances.copy_instances(self.training_data)
         data.no_class()
         data.delete_first_attribute()
@@ -341,7 +341,7 @@ class cw2_classifier():
         # build a clusterer and output model
         print("\nBuilding "+clusterer_name_short+" Clusterer on training data.")
         buildTimeStart=time.time()
-        clusterer = Clusterer(classname=clusterer_name, options=["-N", ""+str(num_clusters)])
+        clusterer = Clusterer(classname=clusterer_name, options=["-N", ""+str(num_clusters), "-S", ""+str(seed)])
         clusterer.build_clusterer(data)
 
         resultsString = ""
@@ -369,7 +369,7 @@ class cw2_classifier():
         resultsString = self.print_both(buildTimeString,resultsString)
 
         #Save Results and Cleanup
-        self.save_results(clusterer_name_short+"_"+"N"+str(num_clusters)+"_",resultsString,output_directory)
+        self.save_results(clusterer_name_short+"_"+"N"+str(num_clusters)+"_S"+str(seed),resultsString, output_directory)
 
     def save_results(self, classifier, string, output_directory, bif=False):
         try:

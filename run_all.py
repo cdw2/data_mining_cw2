@@ -20,19 +20,19 @@ if(len(sys.argv)==2):
 
 #task1
 # filename="fer2018/transformed_arffs/transformed_14.arff"
-# testNum = "task1_P14"
+# testName = "task1_P14"
 
 # #task3
 # filename="fer2018/reduced_arffs/fer2018.reduced.arff"
-# testNum = "task_5_clustering"
+# testName = "task_5_clustering"
 
 # #task5
 # filename="fer2018/reduced_arffs/fer2018surprise.reduced.arff"
-# testNum = "surprise"
+# testName = "surprise"
 
 #task7
 filename="fer2018/transformed_arffs/transformed_14.arff"
-testNum = "task7_14Pixels_auto"
+testName = "task7_14Pixels_seed_test"
 
 
 class myThread (threading.Thread):
@@ -83,71 +83,71 @@ def extract():
         extractor.run()
 
 def run_ibk_crossval(args):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     ibkCls_crossval = classify.cw2_classifier()
     ibkCls_crossval.load_data(filename)
-    ibkCls_crossval.run_ibk_crossval("results/"+str(testNum))
+    ibkCls_crossval.run_ibk_crossval("results/"+str(testName))
 
 def run_ibk_split(args):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     ibkCls = classify.cw2_classifier()
     ibkCls.load_data_split(filename,80)
-    ibkCls.run_ibk_split("results/"+str(testNum))
+    ibkCls.run_ibk_split("results/"+str(testName))
 
 def run_nb_split(args):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     naiveBayesCls = classify.cw2_classifier()
     naiveBayesCls.load_data_split(filename,80)
-    naiveBayesCls.run_naive_bayes_split("results/"+str(testNum))
+    naiveBayesCls.run_naive_bayes_split("results/"+str(testName))
 
 def run_nb_crossval(args):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     naiveBayesCls_crossval = classify.cw2_classifier()
     naiveBayesCls_crossval.load_data(filename)
-    naiveBayesCls_crossval.run_naive_bayes_crossval("results/"+str(testNum))
+    naiveBayesCls_crossval.run_naive_bayes_crossval("results/"+str(testName))
 
 def run_bayes_split(parents=1):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     BayesCls_split = classify.cw2_classifier()
     BayesCls_split.load_data_split(filename,80)
-    BayesCls_split.run_bayes_split("results/"+str(testNum),parents)
+    BayesCls_split.run_bayes_split("results/"+str(testName),parents)
 
     BayesCls_split = classify.cw2_classifier()
     BayesCls_split.load_data_split(filename,80)
-    BayesCls_split.run_bayes_hill_split("results/"+str(testNum),parents)
+    BayesCls_split.run_bayes_hill_split("results/"+str(testName),parents)
 
     BayesCls_split = classify.cw2_classifier()
     BayesCls_split.load_data_split(filename,80)
-    BayesCls_split.run_bayes_tan_split("results/"+str(testNum),parents)
+    BayesCls_split.run_bayes_tan_split("results/"+str(testName),parents)
 
 def run_simplekm_noclass(args):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename, True)
-    simplek_full.run_cluster_simplek("results/"+str(testNum),True, 7)
+    simplek_full.run_cluster_simplek("results/"+str(testName),True, 7)
 
 def run_simplekm_with_class(args):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename, True)
-    simplek_full.run_cluster_simplek("results/"+str(testNum),False, 7)
+    simplek_full.run_cluster_simplek("results/"+str(testName),False, 7)
 
 def run_clusters_auto1(num_clusters):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
@@ -155,28 +155,42 @@ def run_clusters_auto1(num_clusters):
 
     clusterList = [2,4,7,10,15]
     for clusterNum in clusterList:
-        simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.EM",clusterNum)
+        simplek_full.run_clustering_task7_manual("results/"+str(testName),"weka.clusterers.EM",clusterNum)
 
 def run_clusters_auto2(num_clusters):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
 
-    # simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Canopy")
-    # simplek_full.run_clustering_task7_auto("results/"+str(testNum),"weka.clusterers.Cobweb")
+    # simplek_full.run_clustering_task7_auto("results/"+str(testName),"weka.clusterers.Canopy")
+    # simplek_full.run_clustering_task7_auto("results/"+str(testName),"weka.clusterers.Cobweb")
 
 def run_clusters_manual(num_clusters):
-    global filename, testNum
+    global filename, testName
     jvm_helper = classify.cw2_helper()
 
     simplek_full = classify.cw2_classifier()
     simplek_full.load_data(filename)
 
-    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.FarthestFirst", num_clusters)
-    simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.SimpleKMeans", num_clusters)
-    # simplek_full.run_clustering_task7_manual("results/"+str(testNum),"weka.clusterers.HierarchicalClusterer", num_clusters)
+    simplek_full.run_clustering_task7_manual("results/"+str(testName),"weka.clusterers.FarthestFirst", num_clusters)
+    simplek_full.run_clustering_task7_manual("results/"+str(testName),"weka.clusterers.SimpleKMeans", num_clusters)
+    # simplek_full.run_clustering_task7_manual("results/"+str(testName),"weka.clusterers.HierarchicalClusterer", num_clusters)
+
+def test_seeds_manual(args):
+    global filename, testName
+    jvm_helper = classify.cw2_helper()
+
+    simplek_full = classify.cw2_classifier()
+    simplek_full.load_data(filename)
+
+    clusterNum=7
+    seedList = [1,10,20,40,50,80,100,150]
+    for seed in seedList:
+        simplek_full.run_clustering_task7_manual("results/"+str(testName),"weka.clusterers.EM", clusterNum, seed)
+        simplek_full.run_clustering_task7_manual("results/"+str(testName),"weka.clusterers.FarthestFirst", clusterNum, seed)
+
 
 def run_classifiers():
 
@@ -202,13 +216,15 @@ def run_classifiers():
     # thread2 = myThread(2, "run_simplekm_with_class", run_simplekm_with_class)
 
     #TASK7
-    thread1 = myThread(1, "run_clusters_auto1", run_clusters_auto1)
+    # thread1 = myThread(1, "run_clusters_auto1", run_clusters_auto1)
     # thread1 = myThread(2, "run_clusters_auto2", run_clusters_auto2)
 
     # thread1 = myThread(1, "run_clusters_manual", run_clusters_manual, 4)
-    # thread2 = myThread(2, "run_clusters_manual", run_clusters_manual (15))
-    # thread3 = myThread(3, "run_clusters_manual", run_clusters_manual (7))
-    # thread4 = myThread(4, "run_clusters_manual", run_clusters_manual (10))
+    # thread2 = myThread(2, "run_clusters_manual", run_clusters_manual, (15))
+    # thread3 = myThread(3, "run_clusters_manual", run_clusters_manual, (7))
+    # thread4 = myThread(4, "run_clusters_manual", run_clusters_manual, (10))
+
+    thread1 = myThread(4, "run_seeds_manual", test_seeds_manual, (0))
 
     # Start new Threads
     thread1.start()
